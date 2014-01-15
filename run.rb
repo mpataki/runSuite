@@ -1,7 +1,7 @@
 require 'fileutils'
 
-# Test prog1 against prog2 from input found in suite file
-# Usage: ruby runSuite_v2.rb ./p1 ./p2 suite
+# Compare program_1 & program_2 output
+# Usage: ruby run.rb program_1 program_2 test_suite_directory
 
 # MAIN
 
@@ -9,7 +9,7 @@ prog1 = ARGV.shift
 prog2 = ARGV.shift
 suite = ARGV.shift  
 unless File.exists?(prog1) && File.exists?(prog2) && Dir.exists?(suite)
-  puts "Usage: ruby runSuite_v2.rb program_1 program_2 test_suite_directory"
+  puts "Usage: ruby run.rb program_1 program_2 test_suite_directory"
   exit
 end
 

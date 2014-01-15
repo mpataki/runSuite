@@ -1,0 +1,4 @@
+Compare program_1 & program_2 output
+Usage: ruby run.rb program_1 program_2 test_suite_directory
+
+The script expects a directory name to be passed as third argument. The directory should hold files containing command line arguments to be passed to both programs.
