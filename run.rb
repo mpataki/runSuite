@@ -14,8 +14,8 @@ begin
   end
 
   temp_file1, temp_file2 = "", ""
-  begin temp_file1 = "#{prog1}_#{rand(1000)}.out" end while File.exists? temp_file1
-  begin temp_file2 = "#{prog2}_#{rand(1000)}.out" end while File.exists? temp_file2
+  begin temp_file1 = "#{suite}/#{prog1}_#{rand(1000)}.out" end while File.exists? temp_file1
+  begin temp_file2 = "#{suite}/#{prog2}_#{rand(1000)}.out" end while File.exists? temp_file2
 
   Dir.open(suite).each do |file_name|
     next if ['.', '..', temp_file1, temp_file2].include? file_name
