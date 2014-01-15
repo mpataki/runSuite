@@ -10,11 +10,11 @@ rescue
   puts "Usage: ruby runSuite_v2.rb ./p1 ./p2 suite"
 end
 
-File.open(suite).each_line do |line|
-  in_file = File.open(line)
+File.open(suite).each_line do |file_name|
+  test_file = File.open(file_name)
   
-  if in_file.nil?
-    puts "File #{in_file} not found"
+  if test_file.nil?
+    puts "File #{test_file} not found"
     return -1
   end
   p1_output = `#{prog1} < #{line}`
