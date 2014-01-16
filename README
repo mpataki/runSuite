@@ -1,4 +1,11 @@
-Compare program_1 & program_2 output
-Usage: ruby run.rb program_1 program_2 test_suite_directory
+This is an automated testing suite.
 
-The script expects a directory name to be passed as third argument. The directory should hold files containing command line arguments to be passed to both programs.
+Usage: 
+  ruby run.rb program_1 program_2 test_suite_directory
+
+Arguments:
+  1 - First executable program
+  2 - Second executable program
+  3 - A directory of test input files (currently for argument input, stdin option to come soon)
+
+`gem install rainbow` to get coloured output.
