@@ -1,11 +1,21 @@
 This is an automated testing suite.
 
+
+Program Vs. Program
 Usage: 
-  ruby run.rb program_1 program_2 test_suite_directory
+  ruby runPVP.rb program_1 program_2 test_suite_directory
 
 Arguments:
   1 - First executable program
   2 - Second executable program
   3 - A directory of test input files (currently for argument input, stdin option to come soon)
+
+
+Program Vs. files
+Usage:
+  ruby run.rb program test_suite_directory
+
+The test suite directory should contain files with the extensions .in and .out
+The .in files will be fed to the program via stdin, and the output of the program will be checked against the .out file.
 
 `gem install rainbow` to get coloured output.

@@ -1,9 +1,6 @@
 require 'fileutils'
 require 'rainbow'
 
-# Compare program_1 & program_2 output
-# Usage: ruby run.rb program_1 program_2 test_suite_directory
-
 class UsageException < StandardError
 end
 
@@ -17,38 +14,34 @@ end
 
 # MAIN
 begin
-  raise UsageException unless ARGV.count == 5
-  prog1 = ARGV.shift
-  prog2 = ARGV.shift
-  suite = ARGV.shift  
-  throw UsageException.new unless File.exists?(prog1) && File.exists?(prog2) && Dir.exists?(suite)
+  raise UsageException unless ARGV.count == 2
+  prog = ARGV.shift
+  suite = ARGV.shift
+  throw UsageException.new unless File.exists?(prog) && Dir.exists?(suite)
 
-  temp_file1, temp_file2 = "", ""
-  begin temp_file1 = "#{suite}/#{prog1}_#{rand(1000)}.out" end while File.exists? temp_file1
-  begin temp_file2 = "#{suite}/#{prog2}_#{rand(1000)}.out" end while File.exists? temp_file2
+  temp_file = ""
+  begin temp_file = "#{suite}/#{prog}_#{rand(1000)}.out" end while File.exists? temp_file
 
   Dir.open(suite).each do |file_name|
-    next if ['.', '..', temp_file1, temp_file2].include? file_name
-    params = File.read "#{suite}/#{file_name}"
-    raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
+    next if ['.', '..', temp_file].include?(file_name) || file_name.match('.out')
 
-    system "./#{prog1} #{params} > #{temp_file1}"
-    system "./#{prog2} #{params} > #{temp_file2}"
+    system "./#{prog} < #{suite}/#{file_name} > #{temp_file}"
+    file_name = file_name.slice!(0..file_name.length-4) # cut off '.in'
 
-    if FileUtils::compare_file temp_file1, temp_file2
+    if FileUtils::compare_file temp_file, "#{suite}/#{file_name}.out"
       puts Rainbow("#{file_name} PASSED").green
     else
       puts Rainbow("#{file_name} FAILED").red
-      puts Rainbow("#{temp_file1} : #{temp_file2}").yellow
-      system "diff #{temp_file1} #{temp_file2}"
+      puts Rainbow("#{file_name}.out : #{temp_file}").yellow
+      system "diff #{suite}/#{file_name}.out #{temp_file}"
     end
   end
 
 rescue UsageException => e
-  puts Rainbow("Usage: ruby run.rb program_1 program_2 test_suite_directory").red
+  puts Rainbow("Usage: ruby run.rb program test_suite_directory").red
   exit
 rescue NoTestFileException => e
   puts Rainbow(e.message).red
 end
 
-File.delete temp_file1, temp_file2
+File.delete temp_file
