@@ -32,7 +32,7 @@ begin
       puts Rainbow("#{file_name} PASSED").green
     else
       puts Rainbow("#{file_name} FAILED").red
-      puts Rainbow("#{file_name}.out : #{temp_file}").yellow
+      puts Rainbow("#{file_name}.out : #{prog} output").yellow
       system "diff #{suite}/#{file_name}.out #{temp_file}"
     end
   end
