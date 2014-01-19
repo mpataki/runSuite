@@ -1,5 +1,8 @@
 require 'fileutils'
-require 'rainbow'
+begin
+  require 'rainbow'
+rescue LoadError
+end
 
 class UsageException < StandardError
 end
@@ -12,12 +15,20 @@ class NoTestFileException < StandardError
   end
 end
 
+def print string, color
+  begin
+    puts Rainbow(string).color(color)
+  rescue NoMethodError
+    puts string
+  end
+end
+
 # MAIN
 begin
   raise UsageException unless ARGV.count == 2
   prog = ARGV.shift
   suite = ARGV.shift
-  throw UsageException.new unless File.exists?(prog) && Dir.exists?(suite)
+  throw UsageException.new unless File.exists?(prog) && File.exists?(suite)
 
   temp_file = ""
   begin temp_file = "#{suite}/#{prog}_#{rand(1000)}.out" end while File.exists? temp_file
@@ -29,19 +40,19 @@ begin
     file_name = file_name.slice!(0..file_name.length-4) # cut off '.in'
 
     if FileUtils::compare_file temp_file, "#{suite}/#{file_name}.out"
-      puts Rainbow("#{file_name} PASSED").green
+      print "#{file_name} PASSED", :green
     else
-      puts Rainbow("#{file_name} FAILED").red
-      puts Rainbow("#{file_name}.out : #{prog} output").yellow
+      print "#{file_name} FAILED", :red
+      print "#{file_name}.out : #{prog} output", :yellow
       system "diff #{suite}/#{file_name}.out #{temp_file}"
     end
   end
 
 rescue UsageException => e
-  puts Rainbow("Usage: ruby run.rb program test_suite_directory").red
+  print "Usage: ruby run.rb program test_suite_directory", :red
   exit
 rescue NoTestFileException => e
-  puts Rainbow(e.message).red
+  print e.message, :red
 end
 
 File.delete temp_file
