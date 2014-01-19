@@ -18,4 +18,4 @@ Usage:
 The test suite directory should contain files with the extensions .in and .out
 The .in files will be fed to the program via stdin, and the output of the program will be checked against the .out file.
 
-`gem install rainbow` to get coloured output.
+`gem install rainbow` to get coloured output. (optional)
