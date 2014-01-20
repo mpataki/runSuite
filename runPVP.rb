@@ -1,5 +1,8 @@
 require 'fileutils'
-require 'rainbow'
+begin
+  require 'rainbow'
+rescue LoadError
+end
 
 # Compare program_1 & program_2 output
 # Usage: ruby run.rb program_1 program_2 test_suite_directory
@@ -12,6 +15,14 @@ class NoTestFileException < StandardError
 
   def initialize(message)
     @message = message
+  end
+end
+
+def print string, color
+  begin
+    puts Rainbow(string).color(color)
+  rescue NoMethodError
+    puts string
   end
 end
 
@@ -36,19 +47,19 @@ begin
     system "./#{prog2} #{params} > #{temp_file2}"
 
     if FileUtils::compare_file temp_file1, temp_file2
-      puts Rainbow("#{file_name} PASSED").green
+      print "#{file_name} PASSED", :green
     else
-      puts Rainbow("#{file_name} FAILED").red
-      puts Rainbow("#{temp_file1} : #{temp_file2}").yellow
+      print "#{file_name} FAILED", :red
+      print "#{temp_file1} : #{temp_file2}", :yellow
       system "diff #{temp_file1} #{temp_file2}"
     end
   end
 
 rescue UsageException => e
-  puts Rainbow("Usage: ruby run.rb program_1 program_2 test_suite_directory").red
+  print "Usage: ruby run.rb program_1 program_2 test_suite_directory", :red
   exit
 rescue NoTestFileException => e
-  puts Rainbow(e.message).red
+  print e.message, :red
 end
 
 File.delete temp_file1, temp_file2
