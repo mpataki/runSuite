@@ -27,24 +27,36 @@ def print string, color
 end
 
 # MAIN
-begin
-  raise UsageException unless ARGV.count == 5
+begin 
+  # Read arguments
+  case ARGV.count
+  when 4
+    options = ARGV.shift
+  when 3
+  else throw UsageException
+  end
   prog1 = ARGV.shift
   prog2 = ARGV.shift
-  suite = ARGV.shift  
-  throw UsageException.new unless File.exists?(prog1) && File.exists?(prog2) && Dir.exists?(suite)
+  suite = ARGV.shift 
+  throw UsageException.new unless File.exists?(prog1) && File.exists?(prog2) && File.exists?(suite)
 
   temp_file1, temp_file2 = "", ""
-  begin temp_file1 = "#{suite}/#{prog1}_#{rand(1000)}.out" end while File.exists? temp_file1
-  begin temp_file2 = "#{suite}/#{prog2}_#{rand(1000)}.out" end while File.exists? temp_file2
+  begin temp_file1 = "#{prog1}_#{rand(1000)}.out" end while File.exists? temp_file1
+  begin temp_file2 = "#{prog2}_#{rand(1000)}.out" end while File.exists? temp_file2
 
   Dir.open(suite).each do |file_name|
-    next if ['.', '..', temp_file1, temp_file2].include? file_name
-    params = File.read "#{suite}/#{file_name}"
-    raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
+    next if ['.', '..'].include? file_name
 
-    system "./#{prog1} #{params} > #{temp_file1}"
-    system "./#{prog2} #{params} > #{temp_file2}"
+    if options == "-a"
+      system "./#{prog1} #{suite}/#{file_name} > #{temp_file1}"
+      system "./#{prog2} #{suite}/#{file_name} > #{temp_file2}"      
+    else # default behaviour
+      params = File.read "#{suite}/#{file_name}"
+      raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
+
+      system "./#{prog1} #{params} > #{temp_file1}"
+      system "./#{prog2} #{params} > #{temp_file2}"
+    end
 
     if FileUtils::compare_file temp_file1, temp_file2
       print "#{file_name} PASSED", :green

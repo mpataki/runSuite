@@ -3,12 +3,16 @@ This is an automated testing suite.
 
 Program Vs. Program
 Usage: 
-  ruby runPVP.rb program_1 program_2 test_suite_directory
+  ruby runPVP.rb [ options ] program_1 program_2 test_suite_directory
 
-Arguments:
-  1 - First executable program
-  2 - Second executable program
-  3 - A directory of test input files (currently for argument input, stdin option to come soon)
+  Arguments:
+    1 - First executable program
+    2 - Second executable program
+    3 - A directory of test input files (currently for argument input, stdin option to come soon)
+
+  options:
+    -a : The file names in your test suite directory will be individually passed as arguments to the programs.
+         By default the contents of each file is passed.
 
 
 Program Vs. files
