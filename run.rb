@@ -43,7 +43,7 @@ begin
   Dir.open(suite).each do |file_name|
     next if ['.', '..', temp_file].include?(file_name) || file_name.match('.out')
 
-    system "./#{prog} #{options == "-a" ? "" : "<"} #{suite}/#{file_name} &> #{temp_file}"
+    `./#{prog} #{options == "-a" ? "" : "<"} #{suite}/#{file_name} &> #{temp_file}`
 
     file_name = file_name.slice!(0..file_name.length-4) # cut off '.in'
 
