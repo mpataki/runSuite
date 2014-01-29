@@ -48,14 +48,14 @@ begin
     next if ['.', '..'].include? file_name
 
     if options == "-a"
-      system "./#{prog1} #{suite}/#{file_name} > #{temp_file1}"
-      system "./#{prog2} #{suite}/#{file_name} > #{temp_file2}"      
+      system "./#{prog1} #{suite}/#{file_name} &> #{temp_file1}"
+      system "./#{prog2} #{suite}/#{file_name} &> #{temp_file2}"      
     else # default behaviour
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
-      system "./#{prog1} #{params} > #{temp_file1}"
-      system "./#{prog2} #{params} > #{temp_file2}"
+      system "./#{prog1} #{params} &> #{temp_file1}"
+      system "./#{prog2} #{params} &> #{temp_file2}"
     end
 
     if FileUtils::compare_file temp_file1, temp_file2
