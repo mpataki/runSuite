@@ -13,6 +13,7 @@ Usage:
   options:
     -a : The file names in your test suite directory will be individually passed as arguments to the programs.
          By default the contents of each file is passed.
+    -i : The test file will be passed to each program through standard input.
 
 
 Program Vs. files
