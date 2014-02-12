@@ -45,7 +45,8 @@ begin
 
     `./#{prog} #{options == "-a" ? "" : "<"} #{suite}/#{file_name} &> #{temp_file}`
 
-    file_name = file_name.slice!(0..file_name.length-4) # cut off '.in'
+    # remove extension from file name
+    file_name = file_name.slice!(0..file_name.length-4)
 
     if FileUtils::compare_file temp_file, "#{suite}/#{file_name}.out"
       print "#{file_name} PASSED", :green

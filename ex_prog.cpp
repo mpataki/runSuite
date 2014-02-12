@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int main(){
+int main(char* argv[], int argc){
   stringstream ss;
   char ch;
   cin >> noskipws;

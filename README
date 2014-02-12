@@ -24,6 +24,8 @@ Usage:
   The .in files will be fed to the program via stdin, and the output of the program will be checked against the .out file.
 
   options:
-    -a : The .in file names in your test suite directory will be passed as arguments to the program. By default they are read through stdin.
+    -a : The .in file names in your test suite directory will be passed as arguments to the program. 
+    By default they are read through stdin.
+
 
 `gem install rainbow` to get coloured output. (optional)

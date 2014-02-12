@@ -51,8 +51,8 @@ begin
       `./#{prog1} #{suite}/#{file_name} &> #{temp_file1}`
       `./#{prog2} #{suite}/#{file_name} &> #{temp_file2}`
     elsif options == "-i"
-        `./#{prog1} #{i} < #{suite}/#{file_name} 2> #{temp_file1}`
-        `./#{prog2} #{i} < #{suite}/#{file_name} 2> #{temp_file2}`
+        `./#{prog1} #{i} < #{suite}/#{file_name} &> #{temp_file1}`
+        `./#{prog2} #{i} < #{suite}/#{file_name} &> #{temp_file2}`
     else # default behaviour
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
