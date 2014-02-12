@@ -40,7 +40,14 @@ def Program_vs_Directory args
   Dir.open(suite).each do |file_name|
     next unless file_name.match('.in') # only use .in files
 
-    `./#{prog} #{options == "-a" ? "" : "<"} #{suite}/#{file_name} &> #{temp_file}`
+    if options == "-a"
+      params = File.read "#{suite}/#{file_name}"
+      raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
+
+      `./#{prog} #{params} &> #{temp_file}`
+    else # default behaviour
+      `./#{prog} < #{suite}/#{file_name} &> #{temp_file}`
+    end
 
     # remove extension from file name
     file_name = file_name.slice!(0..file_name.length-4)
