@@ -8,7 +8,7 @@ program_1 : The executable that is to be tested.
 program_2 : The executable that program_1 is to be tested against
 suite     : A Directory of test input files.
 options   : 
-    -a : Passes the input files as arguments to the program(s).
+    -a : Passes the content of the input files as arguments to the program(s).
          Default behaviour is to pass the contents of the files through standard in.
 
 
