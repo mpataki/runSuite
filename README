@@ -1,7 +1,7 @@
 This is an automated testing suite.
 
 Usage:
-  ruby run.rb [options] program_1 [program2] suite
+  ./run.rb [options] program_1 [program2] suite
 
 
 program_1 : The executable that is to be tested.
