@@ -15,6 +15,32 @@ class NoTestFileException < StandardError
   end
 end
 
+def print_help
+  puts "This is an automated testing suite.
+
+Usage:
+  ruby run.rb [options] program_1 [program2] suite
+
+
+program_1 : The executable that is to be tested.
+program_2 : The executable that program_1 is to be tested against
+suite     : A Directory of test input files.
+options   : 
+    -a : Passes the content of the input files as arguments to the program(s).
+         Default behaviour is to pass the contents of the files through standard in.
+    --help : Show help
+    -h : alias for --help
+
+
+If two executables are provided, the runSuite compare their output when passing them both any .in files found in the suite directory.
+
+If only one executable is provided then the runSuite expects the suite directory to contain both .in and .out files. [file_name].in will be passed to the executable and it's output will be compared with [file_name].out.
+
+
+`gem install rainbow` to get coloured output. (optional)
+"
+end
+
 def print string, color
   begin
     puts Rainbow(string).color(color)
@@ -132,6 +158,9 @@ begin
         options = nil
       end
     when 2
+    when 1
+      print_help if ['-h', '--help'].include? ARGV.shift
+      exit
     else throw UsageException
   end
 
@@ -154,10 +183,10 @@ begin
   end
 
 rescue Errno::ENOENT
-  print "Usage: ruby run.rb program test_suite_directory", :red
+  print "Usage: ruby run.rb [options] program_1 [program2] suite", :red
   exit
 rescue UsageException => e
-  print "Usage: ruby run.rb program test_suite_directory", :red
+  print "Usage: ruby run.rb [options] program_1 [program2] suite", :red
   exit
 rescue NoTestFileException => e
   print e.message, :red
