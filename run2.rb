@@ -33,7 +33,7 @@ def Program_vs_Directory args
 
   # make a temp file with a name that doesn't already exist
   temp_file = ""
-  begin temp_file = "#{suite}/#{prog}_#{rand(1000)}.rs_tmp" end while File.exists? temp_file
+  begin temp_file = "#{suite}/#{prog}_#{rand(1000)}.tmp" end while File.exists? temp_file
 
   pass_count, fail_count = 0, 0;
 
@@ -72,8 +72,8 @@ def Program_vs_Program args
   throw UsageException.new unless File.exists?(prog1) && File.exists?(prog2) && File.exists?(suite)
 
   temp_file1, temp_file2 = "", ""
-  begin temp_file1 = "#{prog1}_#{rand(1000)}.out" end while File.exists? temp_file1
-  begin temp_file2 = "#{prog2}_#{rand(1000)}.out" end while File.exists? temp_file2
+  begin temp_file1 = "#{prog1}_#{rand(1000)}.tmp" end while File.exists? temp_file1
+  begin temp_file2 = "#{prog2}_#{rand(1000)}.tmp" end while File.exists? temp_file2
 
   pass_count, fail_count = 0, 0;
 
