@@ -77,9 +77,9 @@ def Program_vs_Directory args
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
-      `./#{prog} #{params} &> #{temp_file}`
+      `./#{prog} #{params} > #{temp_file}`
     else # default behaviour
-      `./#{prog} < #{suite}/#{file_name} &> #{temp_file}`
+      `./#{prog} < #{suite}/#{file_name} > #{temp_file}`
     end
 
     # remove extension from file name
@@ -124,11 +124,11 @@ def Program_vs_Program args
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
-      `./#{prog1} #{params} &> #{temp_file1}`
-      `./#{prog2} #{params} &> #{temp_file2}`
+      `./#{prog1} #{params} > #{temp_file1}`
+      `./#{prog2} #{params} > #{temp_file2}`
     else # default behaviour
-      `./#{prog1} < #{suite}/#{file_name} &> #{temp_file1}`
-      `./#{prog2} < #{suite}/#{file_name} &> #{temp_file2}`
+      `./#{prog1} < #{suite}/#{file_name} > #{temp_file1}`
+      `./#{prog2} < #{suite}/#{file_name} > #{temp_file2}`
     end
 
     if FileUtils::compare_file temp_file1, temp_file2
@@ -176,16 +176,16 @@ begin
 
   if File.directory?(last_arg)
     # Program vs pre-computed output directory
-    Program_vs_Directory( {prog: prog1, 
-                           suite: last_arg, 
-                           options: options
+    Program_vs_Directory( {:prog => prog1, 
+                           :suite => last_arg, 
+                           :options => options
                           })
   else
     # Program vs Program option
-    Program_vs_Program( {prog1: prog1, 
-                         prog2: last_arg, 
-                         suite: ARGV.shift, 
-                         options: options 
+    Program_vs_Program( {:prog1 => prog1, 
+                         :prog2 => last_arg, 
+                         :suite => ARGV.shift, 
+                         :options => options 
                         })
   end
 
