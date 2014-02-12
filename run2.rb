@@ -38,7 +38,7 @@ def Program_vs_Directory args
   pass_count, fail_count = 0, 0;
 
   Dir.open(suite).each do |file_name|
-    next if ['.', '..', temp_file].include?(file_name) || file_name.match('.out')
+    next unless file_name.match('.in') # only use .in files
 
     `./#{prog} #{options == "-a" ? "" : "<"} #{suite}/#{file_name} &> #{temp_file}`
 
@@ -78,20 +78,17 @@ def Program_vs_Program args
   pass_count, fail_count = 0, 0;
 
   Dir.open(suite).each do |file_name|
-    next if ['.', '..'].include?(file_name) || file_name.match('.out')
+    next unless file_name.match('.in') # only use .in files
 
     if options == "-a"
-      `./#{prog1} #{suite}/#{file_name} &> #{temp_file1}`
-      `./#{prog2} #{suite}/#{file_name} &> #{temp_file2}`
-    elsif options == "-i"
-      `./#{prog1} < #{suite}/#{file_name} &> #{temp_file1}`
-      `./#{prog2} < #{suite}/#{file_name} &> #{temp_file2}`
-    else # default behaviour
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
       `./#{prog1} #{params} &> #{temp_file1}`
       `./#{prog2} #{params} &> #{temp_file2}`
+    else # default behaviour
+      `./#{prog1} < #{suite}/#{file_name} &> #{temp_file1}`
+      `./#{prog2} < #{suite}/#{file_name} &> #{temp_file2}`
     end
 
     if FileUtils::compare_file temp_file1, temp_file2

@@ -1,31 +1,20 @@
 This is an automated testing suite.
 
-
-Program Vs. Program
-Usage: 
-  ruby runPVP.rb [ options ] program_1 program_2 test_suite_directory
-
-  Arguments:
-    1 - First executable program
-    2 - Second executable program
-    3 - A directory of test input files (currently for argument input, stdin option to come soon)
-
-  options:
-    -a : The file names in your test suite directory will be individually passed as arguments to the programs.
-         By default the contents of each file is passed.
-    -i : The test file will be passed to each program through standard input.
-
-
-Program Vs. files
 Usage:
-  ruby run.rb [ options ] program test_suite_directory
+  ruby run.rb [options] program_1 [program2] suite
 
-  The test suite directory should contain files with the extensions .in and .out
-  The .in files will be fed to the program via stdin, and the output of the program will be checked against the .out file.
 
-  options:
-    -a : The .in file names in your test suite directory will be passed as arguments to the program. 
-    By default they are read through stdin.
+program_1 : The executable that is to be tested.
+program_2 : The executable that program_1 is to be tested against
+suite     : A Directory of test input files.
+options   : 
+    -a : Passes the input files as arguments to the program(s).
+         Default behaviour is to pass the contents of the files through standard in.
+
+
+If two executables are provided, the runSuite compare their output when passing them both any .in files found in the suite directory.
+
+If only one executable is provided then the runSuite expects the suite directory to contain both .in and .out files. [file_name].in will be passed to the executable and it's output will be compared with [file_name].out.
 
 
 `gem install rainbow` to get coloured output. (optional)
