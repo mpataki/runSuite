@@ -133,10 +133,10 @@ def Program_vs_Program args
 
     if FileUtils::compare_file temp_file1, temp_file2
       pass_count += 1
-      print "#{file_name} PASSED", :green
+      print "#{file_name.slice!(0..file_name.length-4)} PASSED", :green
     else
       fail_count += 1
-      print "#{file_name} FAILED", :red
+      print "#{file_name.slice!(0..file_name.length-4)} FAILED", :red
       print "#{prog1} < : > #{prog2}", :yellow
       system "diff #{temp_file1} #{temp_file2}"
     end
