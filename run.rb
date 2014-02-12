@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'fileutils'
 begin
   require 'rainbow'
@@ -19,7 +21,7 @@ def print_help
   puts "This is an automated testing suite.
 
 Usage:
-  ruby run.rb [options] program_1 [program2] suite
+  ./run.rb [options] program_1 [program2] suite
 
 
 program_1 : The executable that is to be tested.
@@ -188,10 +190,10 @@ begin
   end
 
 rescue Errno::ENOENT
-  print "Usage: ruby run.rb [options] program_1 [program2] suite", :red
+  print "Usage: ./run.rb [options] program_1 [program2] suite", :red
   exit
 rescue UsageException => e
-  print "Usage: ruby run.rb [options] program_1 [program2] suite", :red
+  print "Usage: ./run.rb [options] program_1 [program2] suite", :red
   exit
 rescue NoTestFileException => e
   print e.message, :red
