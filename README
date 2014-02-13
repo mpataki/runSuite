@@ -25,8 +25,3 @@ passed to the executable and it's output will be compared with
 [file_name].out.
 
 `gem install rainbow` to get coloured output. (optional)
-
-
-Note that currently only standard output is being tested. This is due to 
-an issue on U of Waterloo's machines regarding using the '&>' in ruby 
-scripts. A future update will make the script test both stdin and stderr.
