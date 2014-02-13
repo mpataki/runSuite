@@ -77,9 +77,9 @@ def Program_vs_Directory args
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
-      `./#{prog} #{params} > #{temp_file}`
+      `./#{prog} #{params} > #{temp_file} 2>&1`
     else # default behaviour
-      `./#{prog} < #{suite}/#{file_name} > #{temp_file}`
+      `./#{prog} < #{suite}/#{file_name} > #{temp_file} 2>&1`
     end
 
     # remove extension from file name
@@ -124,11 +124,11 @@ def Program_vs_Program args
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
-      `./#{prog1} #{params} > #{temp_file1}`
-      `./#{prog2} #{params} > #{temp_file2}`
+      `./#{prog1} #{params} > #{temp_file1} 2>&1`
+      `./#{prog2} #{params} > #{temp_file2} 2>&1`
     else # default behaviour
-      `./#{prog1} < #{suite}/#{file_name} > #{temp_file1}`
-      `./#{prog2} < #{suite}/#{file_name} > #{temp_file2}`
+      `./#{prog1} < #{suite}/#{file_name} > #{temp_file1} 2>&1`
+      `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1`
     end
 
     if FileUtils::compare_file temp_file1, temp_file2
