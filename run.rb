@@ -44,8 +44,8 @@ directory to contain both .in and .out files. [file_name].in will be
 passed to the executable and it's output will be compared with
 [file_name].out.
 
-`gem install rainbow` to get coloured output. (optional)
-"
+`gem install rainbow` to get coloured output. (optional)"
+
 end
 
 def print string, color
