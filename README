@@ -16,8 +16,12 @@ options   :
     -h     : alias for --help
 
 
-If two executables are provided, the runSuite compare their output when 
+If two executables are provided, the runSuite will compare their output when 
 passing them both any .in files found in the suite directory.
+
+If .out files exist in the suite directory, they will be used instead of the 
+second program's output. (This is useful when testing cases where you expect 
+your program's output to differ from that of the second program.)
 
 If only one executable is provided then the runSuite expects the suite 
 directory to contain both .in and .out files. [file_name].in will be 

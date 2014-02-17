@@ -36,8 +36,12 @@ options   :
     -h     : alias for --help
 
 
-If two executables are provided, the runSuite compare their output when 
+If two executables are provided, the runSuite will compare their output when 
 passing them both any .in files found in the suite directory.
+
+If .out files exist in the suite directory, they will be used instead of the 
+second program's output. (This is useful when testing cases where you expect 
+your program's output to differ from that of the second program.)
 
 If only one executable is provided then the runSuite expects the suite 
 directory to contain both .in and .out files. [file_name].in will be 
@@ -120,11 +124,11 @@ def Program_vs_Program args
   Dir.open(suite).each do |file_name|
     next unless file_name.match('.in') # only use .in files
     output_file = temp_file2
-    use_output_file = false
+    use_out_file = false
 
-    if File.exists? "#{suite}/#{file_name[0, file_name.length-4]}.out"
-      output_file = "#{suite}/#{file_name[0, file_name.length-4]}.out"
-      use_output_file = true
+    if File.exists? "#{suite}/#{file_name[0, file_name.length-3]}.out"
+      output_file = "#{suite}/#{file_name[0, file_name.length-3]}.out"
+      use_out_file = true
     end
 
     if options == "-a"
@@ -132,19 +136,19 @@ def Program_vs_Program args
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
       `./#{prog1} #{params} > #{temp_file1} 2>&1`
-      `./#{prog2} #{params} > #{temp_file2} 2>&1` unless use_output_file 
+      `./#{prog2} #{params} > #{temp_file2} 2>&1` unless use_out_file 
     else # default behaviour
       `./#{prog1} < #{suite}/#{file_name} > #{temp_file1} 2>&1`
-      `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1` unless use_output_file 
+      `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1` unless use_out_file 
     end
 
     if FileUtils::compare_file temp_file1, output_file
       pass_count += 1
-      print "#{file_name[0, file_name.length-4]} PASSED", :green
+      print "#{file_name[0, file_name.length-3]} PASSED", :green
     else
       fail_count += 1
-      print "#{file_name[0, file_name.length-4]} FAILED", :red
-      print "#{prog1} < : > #{prog2}", :yellow
+      print "#{file_name[0, file_name.length-3]} FAILED", :red
+      print "#{prog1} < : > #{use_out_file ? file_name[0, file_name.length-3] << ".out" : prog2}", :yellow
       system "diff #{temp_file1} #{output_file}"
       puts ""
     end
