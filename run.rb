@@ -120,11 +120,11 @@ def Program_vs_Program args
   Dir.open(suite).each do |file_name|
     next unless file_name.match('.in') # only use .in files
     output_file = temp_file2
-    useProgram = true
+    use_output_file = false
 
     if File.exists? "#{suite}/#{file_name[0, file_name.length-4]}.out"
       output_file = "#{suite}/#{file_name[0, file_name.length-4]}.out"
-      useProgram = false
+      use_output_file = true
     end
 
     if options == "-a"
@@ -132,10 +132,10 @@ def Program_vs_Program args
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
       `./#{prog1} #{params} > #{temp_file1} 2>&1`
-      if useProgram `./#{prog2} #{params} > #{temp_file2} 2>&1`
+      `./#{prog2} #{params} > #{temp_file2} 2>&1` unless use_output_file 
     else # default behaviour
       `./#{prog1} < #{suite}/#{file_name} > #{temp_file1} 2>&1`
-      if useProgram `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1`
+      `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1` unless use_output_file 
     end
 
     if FileUtils::compare_file temp_file1, output_file
