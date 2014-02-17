@@ -119,26 +119,33 @@ def Program_vs_Program args
 
   Dir.open(suite).each do |file_name|
     next unless file_name.match('.in') # only use .in files
+    output_file = temp_file2
+    useProgram = true
+
+    if File.exists? "#{suite}/#{file_name[0, file_name.length-4]}.out"
+      output_file = "#{suite}/#{file_name[0, file_name.length-4]}.out"
+      useProgram = false
+    end
 
     if options == "-a"
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
 
       `./#{prog1} #{params} > #{temp_file1} 2>&1`
-      `./#{prog2} #{params} > #{temp_file2} 2>&1`
+      if useProgram `./#{prog2} #{params} > #{temp_file2} 2>&1`
     else # default behaviour
       `./#{prog1} < #{suite}/#{file_name} > #{temp_file1} 2>&1`
-      `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1`
+      if useProgram `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1`
     end
 
-    if FileUtils::compare_file temp_file1, temp_file2
+    if FileUtils::compare_file temp_file1, output_file
       pass_count += 1
-      print "#{file_name.slice!(0..file_name.length-4)} PASSED", :green
+      print "#{file_name[0, file_name.length-4]} PASSED", :green
     else
       fail_count += 1
-      print "#{file_name.slice!(0..file_name.length-4)} FAILED", :red
+      print "#{file_name[0, file_name.length-4]} FAILED", :red
       print "#{prog1} < : > #{prog2}", :yellow
-      system "diff #{temp_file1} #{temp_file2}"
+      system "diff #{temp_file1} #{output_file}"
       puts ""
     end
   end
