@@ -17,7 +17,7 @@ options   :
 
 
 If two executables are provided, the runSuite will compare their output when 
-passing them both any .in files found in the suite directory.
+both are passed each .in file found in the suite directory.
 
 If .out files exist in the suite directory, they will be used instead of the 
 second program's output. (This is useful when testing cases where you expect 
