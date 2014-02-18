@@ -66,7 +66,7 @@ def Program_vs_Directory args
   suite = args[:suite]
   options = args[:options] if args.has_key? :options
 
-  throw UsageException.new unless File.exists?(prog) && File.exists?(suite)
+  raise UsageException.new unless File.exists?(prog) && File.exists?(suite)
 
   # make a temp file with a name that doesn't already exist
   temp_file = ""
@@ -113,7 +113,7 @@ def Program_vs_Program args
   suite = args[:suite]
   options = args[:options] if args.has_key? :options
 
-  throw UsageException.new unless File.exists?(prog1) && File.exists?(prog2) && File.exists?(suite)
+  raise UsageException.new unless File.exists?(prog1) && File.exists?(prog2) && File.exists?(suite)
 
   temp_file1, temp_file2 = "", ""
   begin temp_file1 = "#{prog1}_#{rand(1000)}.tmp" end while File.exists? temp_file1
@@ -202,9 +202,11 @@ begin
 
 rescue Errno::ENOENT
   print "Usage: ./run.rb [options] program_1 [program2] suite", :red
+  puts "  Try './run.rb -h' for help"
   exit
 rescue UsageException => e
   print "Usage: ./run.rb [options] program_1 [program2] suite", :red
+  puts "  Try './run.rb -h' for help"
   exit
 rescue NoTestFileException => e
   print e.message, :red
