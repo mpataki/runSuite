@@ -157,7 +157,8 @@ def Program_vs_Program args
   puts ""
   print "PASSED: #{pass_count}, FAILED: #{fail_count}", (fail_count > 0) ? :red : :green
 
-  File.delete temp_file1, temp_file2
+    File.delete temp_file1
+    File.delete temp_file2 if File.exists? temp_file2   # may not exist if only .out files were used
 end
 
 
