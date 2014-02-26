@@ -66,7 +66,8 @@ def Program_vs_Directory args
   suite = args[:suite]
   options = args[:options] if args.has_key? :options
 
-  raise UsageException.new unless File.exists?(prog) && File.exists?(suite)
+  raise NoTestFileException.new("Couldn't find program #{prog}") unless File.exists?(prog)
+  raise NoTestFileException.new("Couldn't find test suite #{suite}") unless File.exists?(suite)
 
   # make a temp file with a name that doesn't already exist
   temp_file = ""
@@ -89,6 +90,10 @@ def Program_vs_Directory args
     # remove extension from file name
     file_name = file_name.slice!(0..file_name.length-4)
 
+    unless File.file?("#{suite}/#{file_name}.out")
+      print "#{file_name}.out missing, skipping...", :yellow
+      next
+    end
     if FileUtils::compare_file temp_file, "#{suite}/#{file_name}.out"
       pass_count += 1
       print "#{file_name} PASSED", :green
@@ -113,7 +118,9 @@ def Program_vs_Program args
   suite = args[:suite]
   options = args[:options] if args.has_key? :options
 
-  raise UsageException.new unless File.exists?(prog1) && File.exists?(prog2) && File.exists?(suite)
+  raise NoTestFileException.new("Couldn't find program #{prog1}") unless File.exists?(prog1)
+  raise NoTestFileException.new("Couldn't find program #{prog2}") unless File.exists?(prog2)
+  raise NoTestFileException.new("Couldn't find test suite #{suite}") unless File.exists?(suite)
 
   temp_file1, temp_file2 = "", ""
   begin temp_file1 = "#{prog1}_#{rand(1000)}.tmp" end while File.exists? temp_file1
@@ -142,6 +149,10 @@ def Program_vs_Program args
       `./#{prog2} < #{suite}/#{file_name} > #{temp_file2} 2>&1` unless use_out_file 
     end
 
+    unless File.file?(output_file)
+      print "#{output_file} missing, skipping...", :yellow
+      next
+    end
     if FileUtils::compare_file temp_file1, output_file
       pass_count += 1
       print "#{file_name[0, file_name.length-3]} PASSED", :green
