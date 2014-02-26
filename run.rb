@@ -191,7 +191,7 @@ begin
     when 1
       print_help if ['-h', '--help'].include? ARGV.shift
       exit
-    else throw UsageException
+    else raise UsageException
   end
 
   prog1 = ARGV.shift if prog1.nil? 
