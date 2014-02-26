@@ -1,7 +1,7 @@
 This is an automated testing suite.
 
 Usage:
-  ./run.rb [options] program_1 [program2] suite
+  run [options] program_1 [program2] suite
 
 
 program_1 : The executable that is to be tested.
@@ -12,9 +12,9 @@ options   :
          program(s). Default behaviour is to pass the contents of the 
          files through standard in.
 
-    --help : Show help
-    -h     : alias for --help
 
+run (--help, -h) : Display this readme
+run update : update runSuite from git
 
 If two executables are provided, the runSuite will compare their output when 
 both are passed each .in file found in the suite directory.
@@ -27,5 +27,8 @@ If only one executable is provided then the runSuite expects the suite
 directory to contain both .in and .out files. [file_name].in will be 
 passed to the executable and it's output will be compared with
 [file_name].out.
+
+Make the command global by adding this line to your bash_profile:
+  export PATH="/path/to/runSuite/:$PATH"
 
 `gem install rainbow` to get coloured output. (optional)

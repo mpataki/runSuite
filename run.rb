@@ -21,20 +21,20 @@ def print_help
   puts "This is an automated testing suite.
 
 Usage:
-  ./run.rb [options] program_1 [program2] suite
+  #{File.basename $0} [options] program_1 [program2] suite
 
 
 program_1 : The executable that is to be tested.
 program_2 : The executable that program_1 is to be tested against
-suite     : A Directory of test input files.
+suite     : A directory of test input files.
 options   : 
     -a : Passes the content of the input files as arguments to the    
          program(s). Default behaviour is to pass the contents of the 
          files through standard in.
 
-    --help : Show help
-    -h     : alias for --help
 
+#{File.basename $0} (--help, -h) : Display this readme
+#{File.basename $0} update : update runSuite from git
 
 If two executables are provided, the runSuite will compare their output when 
 both are passed each .in file found in the suite directory.
@@ -47,6 +47,9 @@ If only one executable is provided then the runSuite expects the suite
 directory to contain both .in and .out files. [file_name].in will be 
 passed to the executable and it's output will be compared with
 [file_name].out.
+
+Make the command global by adding this line to your bash_profile:
+  export PATH=\"/path/to/runSuite/:$PATH\"
 
 `gem install rainbow` to get coloured output. (optional)"
 
@@ -189,7 +192,14 @@ begin
       end
     when 2
     when 1
-      print_help if ['-h', '--help'].include? ARGV.shift
+      arg = ARGV.shift
+      if arg == "update"
+        print "Updating...", :white
+        `git --exec-path #{File.dirname(__FILE__)} pull`
+        print "Up to date", :green
+      elsif ['-h', '--help'].include? arg
+        print_help
+      end
       exit
     else raise UsageException
   end
@@ -213,12 +223,12 @@ begin
   end
 
 rescue Errno::ENOENT
-  print "Usage: ./run.rb [options] program_1 [program2] suite", :red
-  puts "  Try './run.rb -h' for help"
+  print "Usage: #{$0} [options] program_1 [program2] suite", :red
+  puts "  Try '#{$0} -h' for help"
   exit
 rescue UsageException => e
-  print "Usage: ./run.rb [options] program_1 [program2] suite", :red
-  puts "  Try './run.rb -h' for help"
+  print "Usage: #{$0} [options] program_1 [program2] suite", :red
+  puts "  Try '#{$0} -h' for help"
   exit
 rescue NoTestFileException => e
   print e.message, :red
