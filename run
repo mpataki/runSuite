@@ -86,8 +86,6 @@ def Program_vs_Directory args
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
       temp_file.write(`./#{prog} #{params}`)
-      
-      end
       # `./#{prog} #{params} > #{temp_file} 2>&1`
     else # default behaviour
       temp_file.write(`./#{prog} < #{suite}/#{file_name}`)
