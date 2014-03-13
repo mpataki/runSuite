@@ -72,30 +72,27 @@ def Program_vs_Directory args
   raise NoTestFileException.new("Couldn't find program #{prog}") unless File.exists?(prog)
   raise NoTestFileException.new("Couldn't find test suite #{suite}") unless File.exists?(suite)
 
-  # make a temp file with a name that doesn't already exist
-  temp_file = ""
+  temp_file_name = ""                          # make a temp file with a name that doesn't already exist
   begin temp_file_name = "#{suite}/#{prog}_#{rand(1000)}.tmp" end while File.exists? temp_file_name
-  temp_file = File.new(temp_file_name)
-
+  temp_file = File.new temp_file_name, "w"
   pass_count, fail_count = 0, 0;
 
   Dir.open(suite).each do |file_name|
-    next unless file_name.match('.in') # only use .in files
+    next unless file_name.match('.in')                        # only use .in files
 
     if options == "-a"
       params = File.read "#{suite}/#{file_name}"
       raise NoTestFileException.new("Couldn't open #{file_name}") if params.nil?
       temp_file.write(`./#{prog} #{params}`)
       # `./#{prog} #{params} > #{temp_file} 2>&1`
-    else # default behaviour
-      temp_file.write(`./#{prog} < #{suite}/#{file_name}`)
+    else 
+      temp_file.write(`./#{prog} < #{suite}/#{file_name}`)    # default behaviour
       # `./#{prog} < #{suite}/#{file_name} > #{temp_file} 2>&1`
     end
 
-    # remove extension from file name
-    file_name = file_name.slice!(0..file_name.length-4)
+    file_name = file_name.slice!(0..file_name.length-4)       # remove extension from file name
 
-    unless File.file?("#{suite}/#{file_name}.out")
+    unless File.file?("#{suite}/#{file_name}.out")            # Skip test is there is no .out file
       print "#{file_name}.out missing, skipping...", :yellow
       next
     end
@@ -134,7 +131,7 @@ def Program_vs_Program args
   pass_count, fail_count = 0, 0;
 
   Dir.open(suite).each do |file_name|
-    next unless file_name.match('.in') # only use .in files
+    next unless file_name.match('.in')                    # only use .in files
     output_file = temp_file2
     use_out_file = false
 
