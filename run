@@ -75,7 +75,7 @@ def Program_vs_Directory args
   # make a temp file with a name that doesn't already exist
   temp_file = ""
   begin temp_file_name = "#{suite}/#{prog}_#{rand(1000)}.tmp" end while File.exists? temp_file_name
-  temp_file = File.open(temp_file_name)
+  temp_file = File.new(temp_file_name)
 
   pass_count, fail_count = 0, 0;
 
